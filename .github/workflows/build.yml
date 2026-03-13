@@ -21,8 +21,10 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install NDK
-        run: sdkmanager "ndk;25.1.8937393"
+      - name: Accept Android SDK licenses (non-interactive)
+        run: |
+          yes | sdkmanager --licenses > /dev/null 2>&1 || true
+          sdkmanager "ndk;25.1.8937393"
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
