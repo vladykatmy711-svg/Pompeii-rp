@@ -18,13 +18,21 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Устанавливаем Android SDK и принимаем все лицензии автоматически
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Accept Android SDK licenses (non-interactive)
         run: |
+          # Загружаем командную строку SDK (sdkmanager)
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q commandlinetools-linux-*.zip
+          mkdir -p $ANDROID_HOME/cmdline-tools
+          mv cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+          # Добавляем sdkmanager в PATH
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+          # Принимаем все лицензии (отвечаем "y" на все вопросы)
           yes | sdkmanager --licenses > /dev/null 2>&1 || true
-          sdkmanager "ndk;25.1.8937393"
+          # Устанавливаем необходимые компоненты (NDK, platform-tools)
+          yes | sdkmanager "platform-tools" "ndk;25.1.8937393" > /dev/null 2>&1 || true
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
