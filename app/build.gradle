@@ -6,7 +6,7 @@ android {
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "com.byreytiz.game"
+        applicationId "com.blackrussia.game"
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 10
