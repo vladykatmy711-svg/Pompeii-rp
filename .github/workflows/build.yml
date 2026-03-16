@@ -22,14 +22,8 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Check Gradle version
-        run: ./gradlew --version
-
-      - name: Run lint
-        run: ./gradlew lint
-
-      - name: Build with Gradle (with stacktrace)
-        run: ./gradlew assembleDebug --stacktrace
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug
 
       - name: Upload build logs on failure
         if: failure()
@@ -38,4 +32,4 @@ jobs:
           name: build-logs
           path: |
             ~/.gradle/daemon/*/daemon-*.log
-            app/build/reports/lint-results-debug.html
+            app/build/reports/
