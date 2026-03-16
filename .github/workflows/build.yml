@@ -1,34 +1,41 @@
-name: Android Debug Build
+name: Android CI
 
-on: [push]
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK
+
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Check Gradle version
+        run: ./gradlew --version
+
       - name: Run lint
         run: ./gradlew lint
-      - name: Build with Gradle (with logs)
-        run: ./gradlew assembleDebug --stacktrace --info > build.log 2>&1
-      - name: Upload build log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: build.log
-      - name: Upload intermediate resources on failure
+
+      - name: Build with Gradle (with stacktrace)
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload build logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: merged-resources
-          path: app/build/intermediates/merged_res/
+          name: build-logs
+          path: |
+            ~/.gradle/daemon/*/daemon-*.log
+            app/build/reports/lint-results-debug.html
