@@ -1,32 +1,48 @@
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android' // если используете Kotlin
+}
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    namespace 'com.yourpackage.app' // замените на ваш package name
+    compileSdk 34 // используйте актуальный SDK
 
     defaultConfig {
-        applicationId "com.blackrussia.game"
-        minSdkVersion 17
-        targetSdkVersion 28
-        versionCode 10
-        versionName "weikton-games-0.1"
-        multiDexEnabled true
+        applicationId "com.yourpackage.app"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    // Если у вас дублирующиеся ресурсы, добавьте:
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/**']
+            // Если нужно выбрать конкретный файл при конфликте:
+            // pickFirsts += ['**/some_resource']
+        }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation "com.github.skydoves:colorpickerpreference:2.0.4"
-    testImplementation 'junit:junit:4.12'
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
-    implementation 'com.google.firebase:firebase-database:20.0.4'
-    implementation 'com.github.hzy3774:AndroidP7zip:v1.7.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
-    implementation platform('com.google.firebase:firebase-bom:29.2.1')
-    implementation 'com.liulishuo.filedownloader:library:1.7.7'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+   
 }
