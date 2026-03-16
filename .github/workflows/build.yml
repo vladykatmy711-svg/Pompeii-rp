@@ -19,11 +19,24 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      # Очистка повреждённых файлов SDK
+      - name: Clean SDK cache
+        run: |
+          rm -rf $ANDROID_HOME/platforms
+          rm -rf $ANDROID_HOME/build-tools
+          rm -rf $ANDROID_HOME/system-images
+
+      # Принятие лицензий и установка нужных компонентов SDK
+      - name: Install specific SDK platforms
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "platforms;android-34" "build-tools;34.0.0"
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload build logs on failure
         if: failure()
